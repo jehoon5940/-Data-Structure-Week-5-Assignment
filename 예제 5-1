@@ -1,0 +1,75 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_SIZE 5
+
+struct SequentialStack {
+    int stack[MAX_SIZE];
+    int top;
+};
+
+typedef struct SequentialStack SequentialStack;
+
+void initStack(SequentialStack *s) {
+    s->top = -1;
+}
+
+int isFull(SequentialStack *s) {
+    return s->top == MAX_SIZE - 1;
+}
+
+int isEmpty(SequentialStack *s) {
+    return s->top == -1;
+}
+
+void push(SequentialStack *s, int item) {
+    if (isFull(s)) {
+        printf("Stack Overflow\n");
+        return;
+    }
+    s->top++;
+    s->stack[s->top] = item;
+    printf("STACK ");
+    for (int i = 0; i <= s->top; i++) {
+        printf("%d ", s->stack[i]);
+    }
+    printf("\n");
+}
+
+int pop(SequentialStack *s) {
+    if (isEmpty(s)) {
+        printf("Stack Underflow\n");
+        return -1;
+    }
+    int popped = s->stack[s->top];
+    s->top--;
+    printf("pop = %d\n", popped);
+    printf("STACK ");
+    for (int i = 0; i <= s->top; i++) {
+        printf("%d ", s->stack[i]);
+    }
+    printf("\n");
+    return popped;
+}
+
+int peek(SequentialStack *s) {
+    if (isEmpty(s)) {
+        printf("Stack is empty\n");
+        return -1;
+    }
+    printf("peek => %d\n", s->stack[s->top]);
+    return s->stack[s->top];
+}
+
+int main() {
+    SequentialStack stack;
+    initStack(&stack);
+    push(&stack, 1);
+    push(&stack, 2);
+    push(&stack, 3);
+    peek(&stack);
+    pop(&stack);
+    pop(&stack);
+    pop(&stack);
+    return 0;
+}

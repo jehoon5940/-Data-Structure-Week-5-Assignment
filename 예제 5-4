@@ -1,0 +1,75 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+#define MAX_SIZE 100
+
+struct Stack {
+    int top;
+    int array[MAX_SIZE];
+};
+
+typedef struct Stack Stack;
+
+void initStack(Stack* stack) {
+    stack->top = -1;
+}
+
+int isEmpty(Stack* stack) {
+    return stack->top == -1;
+}
+
+int isFull(Stack* stack) {
+    return stack->top == MAX_SIZE - 1;
+}
+
+void push(Stack* stack, int item) {
+    if (isFull(stack)) {
+        printf("Stack Overflow\n");
+        return;
+    }
+    stack->array[++stack->top] = item;
+}
+
+int pop(Stack* stack) {
+    if (isEmpty(stack)) {
+        printf("Stack Underflow\n");
+        return -1;
+    }
+    return stack->array[stack->top--];
+}
+
+int evaluatePostfix(char* exp) {
+    Stack stack;
+    initStack(&stack);
+    int operand1, operand2;
+    for (int i = 0; exp[i]; ++i) {
+        if (isdigit(exp[i])) {
+            push(&stack, exp[i] - '0');
+        } else {
+            operand2 = pop(&stack);
+            operand1 = pop(&stack);
+            switch (exp[i]) {
+                case '+':
+                    push(&stack, operand1 + operand2);
+                    break;
+                case '-':
+                    push(&stack, operand1 - operand2);
+                    break;
+                case '*':
+                    push(&stack, operand1 * operand2);
+                    break;
+                case '/':
+                    push(&stack, operand1 / operand2);
+                    break;
+            }
+        }
+    }
+    return pop(&stack);
+}
+
+int main() {
+    char exp[] = "35*62/-";
+    printf("연산 결과 => %d\n", evaluatePostfix(exp));
+    return 0;
+}

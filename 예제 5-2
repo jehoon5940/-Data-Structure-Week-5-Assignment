@@ -1,0 +1,78 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+typedef struct Node Node;
+
+struct LinkedStack {
+    Node* top;
+};
+
+typedef struct LinkedStack LinkedStack;
+
+void initStack(LinkedStack* stack) {
+    stack->top = NULL;
+}
+
+int isEmpty(LinkedStack* stack) {
+    return stack->top == NULL;
+}
+
+void push(LinkedStack* stack, int data) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    if (newNode == NULL) {
+        printf("Memory allocation failed\n");
+        return;
+    }
+    newNode->data = data;
+    newNode->next = stack->top;
+    stack->top = newNode;
+    printf("STACK ");
+    for (Node* current = stack->top; current != NULL; current = current->next) {
+        printf("%d ", current->data);
+    }
+    printf("\n");
+}
+
+int pop(LinkedStack* stack) {
+    if (isEmpty(stack)) {
+        printf("Stack is empty\n");
+        return -1;
+    }
+    Node* temp = stack->top;
+    int popped = temp->data;
+    stack->top = temp->next;
+    free(temp);
+    printf("pop = %d\n", popped);
+    printf("STACK ");
+    for (Node* current = stack->top; current != NULL; current = current->next) {
+        printf("%d ", current->data);
+    }
+    printf("\n");
+    return popped;
+}
+
+int peek(LinkedStack* stack) {
+    if (isEmpty(stack)) {
+        printf("Stack is empty\n");
+        return -1;
+    }
+    printf("peek = %d\n", stack->top->data);
+    return stack->top->data;
+}
+
+int main() {
+    LinkedStack stack;
+    initStack(&stack);
+    push(&stack, 1);
+    push(&stack, 2);
+    push(&stack, 3);
+    pop(&stack);
+    pop(&stack);
+    pop(&stack);
+    return 0;
+}
